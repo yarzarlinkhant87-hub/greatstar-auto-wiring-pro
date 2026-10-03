@@ -1,0 +1,6 @@
+{
+  "name": "GREATSTAR AUTO-WIRING & SENSOR PRO",
+  "description": "ကားတစ်စီးလုံး ဝါယာရိန်း၊ ဆန်ဆာ & ECU ထိန်းချုပ်မှု မာစတာလက်စွဲ — Power and Ground Architecture, 38 Sensors Master Directory, Multi-Brand Pinout Matrix, Electronic Throttle, VVT-i, EGR, and DIY Workbench.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
