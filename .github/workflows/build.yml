@@ -36,11 +36,12 @@ jobs:
 
       - name: Initialize and Sync Android Platform
         run: |
-          if [ ! -d "android" ]; then
-            echo "Android directory not found. Creating native Android platform..."
+          if [ ! -f "android/gradlew" ]; then
+            echo "Android project incomplete or gradlew missing. Recreating native Android platform..."
+            rm -rf android
             npx cap add android
           else
-            echo "Android directory found. Syncing Capacitor..."
+            echo "Android platform and gradlew ready. Syncing Capacitor..."
             npx cap sync android
           fi
 
