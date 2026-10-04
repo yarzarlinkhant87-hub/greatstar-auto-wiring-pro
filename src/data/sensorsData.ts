@@ -1,6 +1,7 @@
 import { SensorDetail } from '../types/wiring';
+import { ACTUATORS_AND_CONTROLS_DATA } from './actuatorsMasterData';
 
-export const ALL_SENSORS_DATA: SensorDetail[] = [
+const BASE_SENSORS_DATA: SensorDetail[] = [
   // ================= 1. ENGINE TIMING & SYNC =================
   {
     id: 'ckp-sensor',
@@ -10,22 +11,45 @@ export const ALL_SENSORS_DATA: SensorDetail[] = [
     category: 'timing',
     categoryNameMy: 'အင်ဂျင်လည်ပတ်မှု & တိုင်မင်',
     type: '၂ ကြိုး Magnetic Inductive (ခေတ်ဟောင်း) / ၃ ကြိုး Hall Effect (ခေတ်သစ်)',
-    workingPrinciple: 'ကရိုင်းရှပ် ဖလိုက်ဝှီး သို့မဟုတ် ကရိုင်းပူလီပေါ်ရှိ သွားစိတ်များ (ဥပမာ 36-2 သို့မဟုတ် 60-2 သွား) ဖြတ်သန်းသွားချိန်တွင် သံလိုက်စက်ကွင်း ပြောင်းလဲမှုကို အချက်ပြလှိုင်းအဖြစ် ထုတ်ပေးသည်။ ECU သည် ဤအချက်ပြလှိုင်းဖြင့် အင်ဂျင်လည်နှုန်း (RPM) နှင့် ပစ္စတင် အထက်သေမှတ် (TDC) ကို သိရှိပြီး မီးပွားကူးချိန်နှင့် ဆီဖြန်းချိန်ကို တိကျစွာ ဆုံးဖြတ်သည်။',
+    systemRoleMy: 'အင်ဂျင် RPM လည်ပတ်နှုန်းနှင့် ပစ္စတင် အထက်သေမှတ် (TDC) ကို တွက်ချက်ပြီး မီးပွားပေးချိန်နှင့် ဆီဖြန်းချိန်ကို အဆုံးအဖြတ်ပေးခြင်း။',
     internalStructure: 'သံလိုက်အူတိုင် (Permanent Magnet) နှင့် ဝါယာကွိုင်ပတ် (Pickup Coil) သို့မဟုတ် Hall IC ချစ်ပ်ပြားနှင့် တပ်ဆင်ထားသော အမြဲတမ်း သံလိုက်တုံး။',
+    socketPinsCount: 3,
+    socketViewDiagram: [
+      { pinNumber: 1, label: 'Power (5V or 12V)', wireColor: 'Red / Violet (အနီ/ခရမ်း)', destination: 'ECU 5V Ref or EFI Relay 12V', voltage: '5.0V or 12.0V DC', descriptionMy: 'Hall ဆန်ဆာ ပါဝါကြိုး' },
+      { pinNumber: 2, label: 'Ground (GND)', wireColor: 'Brown / Black (အညို/အနက်)', destination: 'ECU E2 Sensor Ground', voltage: '0.0V DC', descriptionMy: 'ဆန်ဆာ အနှုတ်လိုင်း' },
+      { pinNumber: 3, label: 'NE+ / Signal Out', wireColor: 'Blue / White (အပြာ/အဖြူ)', destination: 'ECU Pin NE+ (Engine Speed Input)', voltage: 'Square Wave (0V~5V) / AC 1V~8V', descriptionMy: 'ECU သို့ သွားသော လေးထောင့်လှိုင်း အချက်ပြကြိုး' }
+    ],
+    workingPrinciple: 'ကရိုင်းရှပ် ဖလိုက်ဝှီး သို့မဟုတ် ကရိုင်းပူလီပေါ်ရှိ သွားစိတ်များ (ဥပမာ 36-2 သို့မဟုတ် 60-2 သွား) ဖြတ်သန်းသွားချိန်တွင် သံလိုက်စက်ကွင်း ပြောင်းလဲမှုကို အချက်ပြလှိုင်းအဖြစ် ထုတ်ပေးသည်။ ECU သည် ဤအချက်ပြလှိုင်းဖြင့် အင်ဂျင်လည်နှုန်း (RPM) နှင့် ပစ္စတင် အထက်သေမှတ် (TDC) ကို သိရှိပြီး မီးပွားကူးချိန်နှင့် ဆီဖြန်းချိန်ကို တိကျစွာ ဆုံးဖြတ်သည်။',
     pinoutSummary: [
       { pin: 'Pin 1', signalType: 'Signal (+) or Power 5V/12V', standardValue: 'Magnetic: AC 1V~10V / Hall: 5V/12V Power', description: 'သံလိုက်ကွိုင် အပေါင်း သို့မဟုတ် Hall ပါဝါအဝင်' },
       { pin: 'Pin 2', signalType: 'Signal (-) or Ground', standardValue: 'Ground (0V)', description: 'သံလိုက်ကွိုင် အနှုတ် သို့မဟုတ် Hall အနှုတ်' },
-      { pin: 'Pin 3 (Hall သီးသန့်)', signalType: 'Square Wave Signal Out', standardValue: '0V - 5V Digital Pulse', description: 'ECU ဆီသို့ သွားသော ဒစ်ဂျစ်တယ် လေးထောင့်လှိုင်း' }
+      { pin: 'Pin 3 (Hall သီးသန့်)', signalType: 'Square Wave Signal Out', standardValue: '0V - 5V Digital Pulse', description: 'ECU ဆီသို့ သွားသော ဒစ်ဂျစ်တယ် လေးထောင့်လှိုင်း', ecuTerminal: 'NE+, CRK+' }
     ],
+    wireColorGuide: 'Toyota: NE+ (Black), NE- (White) with Shield wire ground casing',
     specifications: {
       operatingVoltage: 'Magnetic: 0.5V - 15V AC / Hall: 5.0V or 12.0V DC',
-      resistance: 'Magnetic Type: 800Ω ~ 1,400Ω (အေးချိန်) / 1,000Ω ~ 1,800Ω (ပူချိန်)'
+      resistance: 'Magnetic Type: 800Ω ~ 1,400Ω (အေးချိန်) / 1,000Ω ~ 1,800Ω (ပူချိန်)',
+      liveDataIdle: 'Cranking: 1.2V ~ 2.5V AC / Idle 750 RPM: 3.5V ~ 6.0V AC (Freq: 750 Hz)',
+      liveDataCruise: 'Normal Cruise (2000 RPM): 8.0V ~ 12.0V AC Peak (Freq: ~2000 Hz)',
+      liveDataLoad: 'High Speed (3500+ RPM / WOT): 14.0V ~ 22.0V AC Peak (Freq: ~3500+ Hz)',
+      waveformType: 'AC Sine Wave (Inductive) with missing tooth gap, or 0-5V Digital Square Wave (Hall)',
+      overUnderDiagnostic: {
+        tooLowMeaning: 'ဆန်ဆာထိပ်ဝနှင့် ဖလိုက်ဝှီးသွားစိတ်ကြား အကွာအဝေး (Air-gap) ကွာလွန်းနေခြင်း (>1.5mm)၊ သံလိုက်အူတိုင် သံလိုက်ဓာတ် လျော့ကျခြင်း သို့မဟုတ် အတွင်းကွိုင် လိုင်းကျဉ်းနေခြင်း (စက်နှိုးစဉ် Cranking ဗို့အား 0.8V AC မပြည့်ပါက စက်လုံးဝ နှိုးမရပါ)။',
+        tooHighMeaning: 'ဖလိုက်ဝှီးသွားနှင့် ဆန်ဆာထိပ်ဝ အလွန်ကပ်လွန်းခြင်း (<0.3mm) ကြောင့် သွားစိတ်ပွတ်တိုက်မိနိုင်ခြင်း သို့မဟုတ် Hall ဆန်ဆာတွင် 12V မီးကြိုး ရှော့ကျွံနေခြင်း။',
+        flatlineMeaning: 'ဆန်ဆာကွိုင် လုံးဝပြတ်တောက်ခြင်း (Open Coil OL)၊ သို့မဟုတ် အချက်ပြကြိုး အင်ဂျင်ဘော်ဒီနှင့် ပူးရှော့ဖြစ်နေခြင်း (Short to Ground) ဖြစ်သဖြင့် မီးလုံးဝမကူး၊ ဆီလုံးဝမဖြန်းဘဲ စက်သေနေမည်။'
+      }
     },
     testingSteps: [
       { step: 1, title: 'သံလိုက်ကွိုင် အုမ်းတိုင်းခြင်း (Magnetic)', description: 'မီတာကို 2kΩ တွင် ထားပြီး ပင် ၁ နှင့် ၂ ကြား ထောက်ပါ။ 800Ω ~ 1,200Ω အတွင်း ရှိရမည်။ Infinity (OL) ဖြစ်ပါက ကွိုင်ပြတ်နေပြီ။', tool: 'multimeter_ohm' },
       { step: 2, title: 'စက်နှိုးမော်တာလှည့်စဉ် AC ဗို့တိုင်းခြင်း', description: 'မီတာကို AC Volts တွင် ထားပြီး စက်နှိုး (Cranking) ကြည့်ပါ။ အနည်းဆုံး 0.8V ~ 2.0V AC ထွက်ရမည်။ ဗို့မထွက်ပါက ဆန်ဆာသေနေသည်။', tool: 'multimeter_v' },
       { step: 3, title: 'Hall ဆန်ဆာ ပါဝါ & ဂရောင်းစစ်ဆေးခြင်း', description: 'သော့ ON ထားစဉ် 5V သို့မဟုတ် 12V မီးရောက်မရောက်နှင့် 0V ဂရောင်းကျမကျ စစ်ပါ။', tool: 'multimeter_v' }
     ],
+    teachingMasterclass: {
+      triggerMechanism: 'သံလိုက်စက်ကွင်း ဖြတ်သန်းညှို့ယူမှု (Magnetic Flux Disturbance): ဖလိုက်ဝှီး သွားစိတ်များ သံလိုက်ထိပ်ဝကို ဖြတ်သွားချိန်တွင် သံလိုက်စက်ကွင်း သိပ်သည်းဆ ပြောင်းလဲသွားပြီး ဝါယာကွိုင်ထဲသို့ AC လျှပ်စစ် ညှို့ယူဖြစ်ပေါ်ခြင်း။',
+      physicsPrinciple: 'ဖာရာဒေး၏ လျှပ်စစ်သံလိုက် ညှို့ယူမှုနိယာမ: သံလိုက်စက်ကွင်း ပြောင်းလဲနှုန်း (dΦ/dt) မြန်လေလေ (အင်ဂျင်လည်နှုန်း မြန်လေလေ) ထွက်ပေါ်လာသော ဗို့အားနှင့် ကြိမ်နှုန်း (Frequency) ပိုမိုမြင့်တက်လေလေ ဖြစ်သည်။ သွား ၂ ချောင်း ကွက်လပ် (Missing tooth) နေရာတွင် လှိုင်းပြတ်တောက်သွားခြင်းဖြင့် အမှတ် ၁ စလင်ဒါ အထက်သေမှတ်ကို သိရှိသည်။',
+      electronicsControl: 'ECU အတွင်းရှိ Schmitt Trigger IC က အတက်အကျဖြစ်နေသော AC Sine wave လှိုင်းကို ကွန်ပျူတာ နားလည်နိုင်သော သန့်စင်သည့် 0V/5V Digital Square Wave အဖြစ် ပြောင်းလဲပေးသည်။',
+      analogyForStudents: 'ဘီးထောက် ဒိုင်နမိုကဲ့သို့ ဖြစ်သည်။ ဘီးလည်နှုန်း မြန်လျှင် မီးသီး ပိုလင်းသကဲ့သို့၊ အင်ဂျင် မြန်မြန်လည်လေ ဆန်ဆာမှ ဗို့အား ပိုထွက်လေ ဖြစ်သည်။'
+    },
     symptomsOfFailure: [
       'စက်လုံးဝ နှိုးမရခြင်း (Cranking ဖြစ်သော်လည်း မီးလုံးဝ မကူး၊ ဆီလုံးဝ မဖြန်းခြင်း)',
       'အင်ဂျင်ပူလာပါက ရုတ်တရက် စက်သေသွားပြီး အေးသွားမှ ပြန်နှိုးရခြင်း (Heat breakdown)',
@@ -115,7 +139,16 @@ export const ALL_SENSORS_DATA: SensorDetail[] = [
     ],
     specifications: {
       operatingVoltage: '12V Battery Supply + 5V Sensor Logic',
-      signalOutput: 'Engine Idle: 1.2V ~ 1.6V (2.0 ~ 3.5 g/sec) / Full Throttle: 3.8V ~ 4.5V'
+      signalOutput: 'Engine Idle: 1.2V ~ 1.6V (2.0 ~ 3.5 g/sec) / Full Throttle: 3.8V ~ 4.5V',
+      liveDataIdle: 'Idle (750 RPM): 1.1V ~ 1.4V (2.0 ~ 3.2 g/sec)',
+      liveDataCruise: 'Normal Cruise (2000 RPM): 1.8V ~ 2.4V (8.0 ~ 14.0 g/sec)',
+      liveDataLoad: 'High Speed (3500+ RPM / WOT): 3.6V ~ 4.4V (45.0 ~ 90.0 g/sec)',
+      waveformType: 'Analog DC Linear 1.0V~4.5V (or Frequency 2kHz~10kHz)',
+      overUnderDiagnostic: {
+        tooLowMeaning: 'နန်းကြိုးပူပေါ် ဖုန်/ဆီဂျီးပိတ်နေခြင်း၊ လေစစ်ဘူးနှင့် လေတံခါးကြား လေခိုးပေါက် (Vacuum Leak) ဖြစ်ပြီး လေမီတာကို မဖြတ်ဘဲ အပြင်လေ ဝင်နေခြင်း (ကားအဆွဲအရုန်းမရှိဘဲ P0171 Lean တက်မည်)။',
+        tooHighMeaning: 'MAF Ground အနှုတ်လိုင်း မမိခြင်း (High Ground)၊ အတွင်းပိုင်း အန်ပလီဖိုင်ယာ ချစ်ပ်လောင်ခြင်း (ဆီစားအလွန်များပြီး အိတ်ဇော မီးခိုးမည်းများ လိပ်ထွက်ကာ P0172 Rich တက်မည်)။',
+        flatlineMeaning: 'နန်းကြိုးပူ ပြတ်တောက်သွားခြင်း သို့မဟုတ် ၁၂ ဗို့ ပါဝါလုံးဝ မရောက်ခြင်း (ကားစက်နှိုးလျှင် စလိုးမငြိမ်ဘဲ ချက်ချင်း စက်သေသွားမည်)။'
+      }
     },
     testingSteps: [
       { step: 1, title: '+12V နှင့် Ground စစ်ဆေးခြင်း', description: 'သော့ ON ထားပြီး ပင် ၃ တွင် 12V ရောက်မရောက်၊ ပင် ၄ တွင် ဂရောင်းသန့်ရှင်းမှု (Voltage drop < 0.05V) စစ်ပါ။', tool: 'multimeter_v' },
@@ -302,7 +335,17 @@ export const ALL_SENSORS_DATA: SensorDetail[] = [
     ],
     specifications: {
       operatingVoltage: '5.0V DC',
-      signalOutput: '0.5V (0 bar) ➔ 1.0V (Idle 25~35 MPa) ➔ 4.5V (Max Rail Pressure 180~200 MPa)'
+      signalOutput: '0.5V (0 bar) ➔ 1.0V (Idle 25~35 MPa) ➔ 4.5V (Max Rail Pressure 180~200 MPa)',
+      pressureRange: '300 bar ~ 2,200 bar (4,350 psi ~ 31,900 psi)',
+      liveDataIdle: 'Idle (750 RPM): 1.0V ~ 1.3V (280 ~ 350 bar / 4,000 ~ 5,000 psi)',
+      liveDataCruise: 'Normal Cruise (2000 RPM): 2.0V ~ 2.6V (650 ~ 950 bar / 9,400 ~ 13,700 psi)',
+      liveDataLoad: 'High Speed (3500+ RPM / WOT): 3.8V ~ 4.4V (1,600 ~ 2,000 bar / 23,200 ~ 29,000 psi)',
+      waveformType: 'Analog DC Linear 0.5V~4.5V (Proportional to Rail Pressure)',
+      overUnderDiagnostic: {
+        tooLowMeaning: 'ဒီဇယ်ဆီစစ်ဘူး ပိတ်နေခြင်း၊ SCV ဘား ဂျမ်းဖြစ်ပြီး ဆီမဝင်ခြင်း၊ အင်ဂျက်တာ ဆီပြန်လိုင်း (Back-leak) ပေါက်ကျနေခြင်း သို့မဟုတ် ပန့်အူတိုင် ပွန်းစားနေခြင်း (ဖိအား ၂၀၀ ဘား မပြည့်ပါက စက်လုံးဝ နှိုးမရပါ)။',
+        tooHighMeaning: 'SCV ဘား ပိတ်မရဘဲ အပြည့်ပွင့်နေခြင်း (Stuck Open)၊ Pressure Limiter ဘား မပွင့်ခြင်း (အင်ဂျင်ခေါက်သံ အလွန်ဆူညံပြီး ကွန်ပျူတာမှ အရေးပေါ် စက်သတ်ပစ်မည်)။',
+        flatlineMeaning: '5V VC ပါဝါလိုင်း ပြတ်နေခြင်း သို့မဟုတ် အတွင်းပိုင်း ပီဇိုဆီလီကွန်ပြား ကွဲအက်သွားခြင်း (DTC P0193 တက်မည်)။'
+      }
     },
     testingSteps: [
       { step: 1, title: '5.0V ရည်ညွှန်းဗို့ တိကျမှုစစ်ဆေးခြင်း', description: 'ပင် ၁ နှင့် ၂ ကြား တိုင်းပါ။ 4.95V ~ 5.05V အတွင်း တိကျစွာ ရှိရမည်။ 5V ကျနေပါက ဆီဖိအား မှားဖတ်မည်။', tool: 'multimeter_v' },
@@ -677,3 +720,9 @@ export const ALL_SENSORS_DATA: SensorDetail[] = [
     diagnosticTips: 'ကားမောင်းရင်း လေမထွက်တော့ဘဲ အဲကွန်းပိတ်ထားပြီး ၁၀ မိနစ်ခန့်အကြာတွင် ကားအောက်မှ ရေများစွာ ကျလာပြီး လေပြန်ထွက်လာပါက Evaporator Sensor ပျက်၍ ရေခဲရိုက်နေခြင်း ဖြစ်သည်။'
   }
 ];
+
+export const ALL_SENSORS_DATA: SensorDetail[] = [
+  ...ACTUATORS_AND_CONTROLS_DATA,
+  ...BASE_SENSORS_DATA
+];
+

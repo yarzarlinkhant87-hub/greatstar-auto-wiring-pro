@@ -13,23 +13,43 @@ export const ManualResetSection: React.FC<ManualResetSectionProps> = ({
   searchQuery = '',
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<ResetCategory | 'all'>('all');
+  const [selectedBrand, setSelectedBrand] = useState<'all' | 'german' | 'american' | 'chinese' | 'japanese'>('all');
+  const [showExplainer, setShowExplainer] = useState<boolean>(true);
   const [internalSearch, setInternalSearch] = useState<string>('');
   const [selectedReset, setSelectedReset] = useState<ManualResetItem | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const effectiveSearch = (searchQuery || internalSearch).toLowerCase().trim();
 
+  const brandFilters = [
+    { key: 'all', label: 'ကားအားလုံး (All Brands)', icon: '🌐' },
+    { key: 'german', label: '🇩🇪 ဂျာမန်ကား (Benz / BMW / Audi / VW / Porsche)', icon: '🇩🇪' },
+    { key: 'american', label: '🇺🇸 အမေရိကန် (Chevrolet / GMC / Ford)', icon: '🇺🇸' },
+    { key: 'chinese', label: '🇨🇳 တရုတ်ကား (Haval / MG / BYD / Jetour / Geely)', icon: '🇨🇳' },
+    { key: 'japanese', label: '🇯🇵 ဂျပန်ကား (Toyota / Lexus / Honda / Mazda)', icon: '🇯🇵' },
+  ];
+
   const categories: { key: ResetCategory | 'all'; labelMy: string; icon: string }[] = [
     { key: 'all', labelMy: 'အားလုံး (All)', icon: '⭐' },
-    { key: 'oil_engine', labelMy: 'အင်ဂျင် & ဆီပေးစနစ်', icon: '🛢️' },
-    { key: 'windows_doors', labelMy: 'မှန် & တံခါးစနစ်', icon: '🪟' },
-    { key: 'brakes_steering', labelMy: 'ဘရိတ် & စတီယာရင်', icon: '🛑' },
-    { key: 'keys_electronics', labelMy: 'သော့ & အီလက်ထရောနစ်', icon: '🔑' },
+    { key: 'oil_engine', labelMy: 'အင်ဂျင်ဝိုင် & ဆာဗစ်', icon: '🛢️' },
+    { key: 'brakes_steering', labelMy: 'EPB ဘရိတ် & TPMS', icon: '🛑' },
+    { key: 'keys_electronics', labelMy: 'BMS ဘက်ထရီ & သော့', icon: '🔑' },
+    { key: 'windows_doors', labelMy: 'မှန် & အမိုးပေါက်', icon: '🪟' },
   ];
 
   const filteredItems = MANUAL_RESET_DATA.filter((item) => {
     const matchesCat = selectedCategory === 'all' || item.category === selectedCategory;
     if (!matchesCat) return false;
+
+    const carsText = (item.applicableCars + ' ' + item.titleEn + ' ' + item.titleMy).toLowerCase();
+    const matchesBrand =
+      selectedBrand === 'all' ||
+      (selectedBrand === 'german' && (carsText.includes('benz') || carsText.includes('mercedes') || carsText.includes('bmw') || carsText.includes('audi') || carsText.includes('vw') || carsText.includes('volkswagen') || carsText.includes('porsche'))) ||
+      (selectedBrand === 'american' && (carsText.includes('chevrolet') || carsText.includes('chevy') || carsText.includes('gmc') || carsText.includes('ford'))) ||
+      (selectedBrand === 'chinese' && (carsText.includes('haval') || carsText.includes('mg') || carsText.includes('byd') || carsText.includes('jetour') || carsText.includes('geely') || carsText.includes('changan') || carsText.includes('တရုတ်'))) ||
+      (selectedBrand === 'japanese' && (carsText.includes('toyota') || carsText.includes('lexus') || carsText.includes('honda') || carsText.includes('mazda') || carsText.includes('nissan') || carsText.includes('isuzu')));
+
+    if (!matchesBrand) return false;
 
     if (!effectiveSearch) return true;
 
@@ -97,6 +117,88 @@ export const ManualResetSection: React.FC<ManualResetSectionProps> = ({
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Brand Filter Bar */}
+      <div className="flex items-center gap-1.5 overflow-x-auto py-2.5 no-scrollbar border-b border-stone-800">
+        <span className="text-[11px] font-bold text-stone-400 shrink-0 mr-1 flex items-center gap-1">
+          <Car className="w-3.5 h-3.5 text-amber-400" /> ကားတံဆိပ်:
+        </span>
+        {brandFilters.map((brand) => (
+          <button
+            key={brand.key}
+            onClick={() => {
+              if (soundEnabled) playChime(450, 0.08);
+              setSelectedBrand(brand.key as any);
+            }}
+            className={`px-3 py-1 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+              selectedBrand === brand.key
+                ? 'bg-amber-500 text-stone-950 font-black shadow-md shadow-amber-500/30'
+                : 'bg-stone-950 text-stone-400 hover:text-stone-200 border border-stone-800'
+            }`}
+          >
+            <span>{brand.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* 7-Category Reset Explainer Guide for Workshop Technicians */}
+      <div className="mt-3 p-3.5 bg-gradient-to-r from-stone-900 via-stone-900 to-stone-950 rounded-xl border border-amber-500/30 shadow-md">
+        <div
+          onClick={() => setShowExplainer(!showExplainer)}
+          className="flex items-center justify-between cursor-pointer select-none gap-2"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-xl">💡</span>
+            <div>
+              <h4 className="font-bold text-xs sm:text-sm text-amber-300 flex items-center gap-2">
+                မော်တော်ကားများတွင် အများဆုံး ပါဝင်လေ့ရှိသော Reset Settings (၇) မျိုး ခွဲခြမ်းစိတ်ဖြာချက်
+                <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-500/30">
+                  Master Guide
+                </span>
+              </h4>
+              <p className="text-[10px] text-stone-400">
+                ဆရာ Zaw Naing Win မေးမြန်းထားသော: ဘာအပိုင်းတွေ Reset setting တွေ ပါသလဲနှင့် ဘာကြောင့် Reset ချရသလဲ လမ်းညွှန်
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 shrink-0">
+            {showExplainer ? 'ဖွက်မည် ▲' : 'ဖတ်ရှုမည် ▼'}
+          </span>
+        </div>
+
+        {showExplainer && (
+          <div className="mt-3 pt-3 border-t border-stone-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs">
+            <div className="bg-stone-950 p-2.5 rounded-lg border border-amber-500/20">
+              <span className="font-bold text-amber-300 block mb-1">🛢️ ၁။ Oil Life & Service Due (အင်ဂျင်ဝိုင်ဆာဗစ်):</span>
+              <p className="text-[11px] text-stone-300 leading-snug">အင်ဂျင်ဝိုင်လဲပြီးနောက် ကွန်ပျူတာထဲရှိ ရက်စွဲ/ကီလို အဟောင်းကို ၁၀၀% ပြန်သတ်မှတ်ခြင်း။ မချပါက Check Engine/Spanner မီးလင်းပြီး ဒီဇယ်ကားဆို DPF ပိတ်တတ်သည်။</p>
+            </div>
+            <div className="bg-stone-950 p-2.5 rounded-lg border border-rose-500/20">
+              <span className="font-bold text-rose-300 block mb-1">🛑 ၂။ EPB Service Mode (လက်ဘရိတ်မော်တာရုတ်ခြင်း):</span>
+              <p className="text-[11px] text-stone-300 leading-snug">အနောက်ဘရိတ်တုံးလဲရန် ပစ္စတင်ကို မော်တာက နောက်သို့ အလိုအလျောက် ရုတ်ပေးခြင်း။ အတင်းညှပ်ပါက မော်တာဂီယာ သွားကျိုးတတ်သည်။</p>
+            </div>
+            <div className="bg-stone-950 p-2.5 rounded-lg border border-cyan-500/20">
+              <span className="font-bold text-cyan-300 block mb-1">🛞 ၃။ TPMS Reset (တာယာလေပေါင် အချက်ပြမီး):</span>
+              <p className="text-[11px] text-stone-300 leading-snug">တာယာလေပေါင်ချိန်ပြီးနောက် လက်ရှိလေပေါင် (ဥပမာ 32 psi) ကို ကွန်ပျူတာက စံနှုန်းသစ်အဖြစ် ပြန်လည် မှတ်သားစေခြင်း။</p>
+            </div>
+            <div className="bg-stone-950 p-2.5 rounded-lg border border-emerald-500/20">
+              <span className="font-bold text-emerald-300 block mb-1">🔋 ၄။ BMS Battery Registration (ဘက်ထရီအသစ်မှတ်ပုံတင်):</span>
+              <p className="text-[11px] text-stone-300 leading-snug">ဘက်ထရီအသစ်လဲပြီး ကွန်ပျူတာကို အသိပေးခြင်း။ မလုပ်ပါက ဒိုင်နမိုက အားအလွန်အကျွံသွင်းပြီး ဘက်ထရီ ဖောရောင်ပျက်စီးတတ်သည်။</p>
+            </div>
+            <div className="bg-stone-950 p-2.5 rounded-lg border border-purple-500/20">
+              <span className="font-bold text-purple-300 block mb-1">🦋 ၅။ Throttle Body Relearn (စလိုးပြန်မှတ်ခြင်း):</span>
+              <p className="text-[11px] text-stone-300 leading-snug">လေတံခါးဖြုတ်ဆေးပြီးနောက် ကားစလိုးမငြိမ်ဘဲ RPM 1500 ကျော် တက်နေခြင်းကို ကွန်ပျူတာအား လေဝင်ပေါက် အသစ်အတိုင်း ပြန်ညှိစေခြင်း။</p>
+            </div>
+            <div className="bg-stone-950 p-2.5 rounded-lg border border-blue-500/20">
+              <span className="font-bold text-blue-300 block mb-1">🪟 ၆။ Window & Sunroof Relearn (မှန်တင်မှန်ချ အော်တို):</span>
+              <p className="text-[11px] text-stone-300 leading-snug">ဘက်ထရီဖြုတ်ပြီးနောက် မှန်တင်မှန်ချ တစ်ချက်နှိပ် အော်တို ပျောက်သွားခြင်းကို ခလုတ် ၅ စက္ကန့် ဖိထား၍ အဆုံးမှတ် ပြန်သွင်းခြင်း။</p>
+            </div>
+            <div className="bg-stone-950 p-2.5 rounded-lg border border-yellow-500/20 sm:col-span-2 lg:col-span-3">
+              <span className="font-bold text-yellow-300 block mb-1">📐 ၇။ Steering Angle Sensor (SAS) Zero Point (စတီယာရင် စင်တာ ပြန်ချိန်ခြင်း):</span>
+              <p className="text-[11px] text-stone-300 leading-snug">ဘီးချိန် (Wheel Alignment) ပြီးနောက် စတီယာရင် တည့်နေသော်လည်း VSC / ESP မီးလင်းနေခြင်းကို စတီယာရင် ဒစ်ဂရီ သုညအမှတ် (0°) ပြန်သတ်မှတ်ပေးခြင်း။</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Local Search Input if no global query */}

@@ -20,7 +20,9 @@ export interface ManualResetItem {
   whyNeeded: string;
 }
 
-export const MANUAL_RESET_DATA: ManualResetItem[] = [
+import { LUXURY_AND_MODERN_RESET_DATA } from './luxuryCarsResetData';
+
+export const BASE_MANUAL_RESET_DATA: ManualResetItem[] = [
   // 1. ENGINE OIL CHAIN / DIESEL OIL DEGRADATION RESET
   {
     id: 'oil-chain-reset',
@@ -277,3 +279,9 @@ export const MANUAL_RESET_DATA: ManualResetItem[] = [
     whyNeeded: 'ဘက်ထရီဖြုတ်ချိန်တွင် အမိုးပေါက်၏ အပိတ်အဆုံးမှတ် ပျောက်သွားသဖြင့် Jam Protection မော်တာကို ပြန်လည် Calibrate လုပ်ပေးရခြင်း ဖြစ်သည်။'
   }
 ];
+
+export const MANUAL_RESET_DATA: ManualResetItem[] = [
+  ...LUXURY_AND_MODERN_RESET_DATA,
+  ...BASE_MANUAL_RESET_DATA
+];
+
