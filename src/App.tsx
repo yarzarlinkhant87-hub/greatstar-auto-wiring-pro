@@ -11,16 +11,18 @@ import { ManualResetSection } from './components/ManualResetSection';
 import { JdmScreenTranslatorSection } from './components/JdmScreenTranslatorSection';
 import { DtcMasterSection } from './components/DtcMasterSection';
 import { SensorTesterWorkbench } from './components/SensorTesterWorkbench';
+import { CarAcMasterSection } from './components/CarAcMasterSection';
 import { BoltTorqueExplainer } from './components/BoltTorqueExplainer';
 import { CumminsTimingGuide } from './components/CumminsTimingGuide';
 import { ScaniaInjectorTiming } from './components/ScaniaInjectorTiming';
 import { FloatingZoomWidget } from './components/FloatingZoomWidget';
 import { PhoneInstallModal } from './components/PhoneInstallModal';
 import { SystemCategory } from './types/wiring';
-import { Smartphone, ShieldCheck, Heart, Sparkles, Wrench, ChevronDown, ChevronUp } from 'lucide-react';
+import { Smartphone, ShieldCheck, Heart, Sparkles, Wrench, ChevronDown, ChevronUp, Zap, Snowflake } from 'lucide-react';
 import { playChime } from './utils/audio';
 
 export default function App() {
+  const [mainAppMode, setMainAppMode] = useState<'wiring' | 'car_ac'>('wiring');
   const [currentCategory, setCurrentCategory] = useState<SystemCategory>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [zoomLevel, setZoomLevel] = useState<number>(100);
@@ -42,7 +44,7 @@ export default function App() {
       {/* Top Banner for Mobile Installation / APK notification */}
       <div className="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-stone-950 py-1.5 px-3 text-xs font-bold text-center flex items-center justify-center gap-2 shadow-md">
         <Smartphone className="w-4 h-4 text-stone-950 shrink-0" />
-        <span>★ GREATSTAR.Z.N.W ★ — ကားတစ်စီးလုံး ဝါယာရိန်း၊ ဆန်ဆာ & ECU ထိန်းချုပ်မှု မာစတာလက်စွဲ</span>
+        <span>★ GREATSTAR.Z.N.W ★ — ကားတစ်စီးလုံး ဝါယာရိန်း၊ ဆန်ဆာ & အဲကွန်း မဟာလက်စွဲ</span>
         <button
           onClick={() => {
             if (soundEnabled) playChime(700, 0.3);
@@ -54,169 +56,219 @@ export default function App() {
         </button>
       </div>
 
-      {/* Official Master Header with Brand Logo, Global Search & Zoom Controls */}
-      <WiringMasterHeader
-        currentCategory={currentCategory}
-        onSelectCategory={setCurrentCategory}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        zoomLevel={zoomLevel}
-        onZoomChange={setZoomLevel}
-        soundEnabled={soundEnabled}
-        onToggleSound={toggleSound}
-      />
-
-      {/* Main Content Areas */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-4 space-y-5">
-        {/* Search Results Filter Banner if searching */}
-        {searchQuery && (
-          <div className="bg-amber-500/10 border border-amber-500/40 rounded-xl p-3 flex items-center justify-between text-xs text-amber-200">
-            <span>
-              🔍 &quot;<strong>{searchQuery}</strong>&quot; ရှာဖွေမှု ရလဒ်များအား အောက်ပါ ကဏ္ဍအားလုံးတွင် တစ်ပြိုင်နက် ပြသနေပါသည်:
-            </span>
-            <button
-              onClick={() => setSearchQuery('')}
-              className="text-amber-400 hover:text-amber-200 underline font-bold ml-2 cursor-pointer"
-            >
-              ရှာဖွေမှု ဖျက်မည်
-            </button>
-          </div>
-        )}
-
-        {/* 1. POWER & GROUND ARCHITECTURE SECTION */}
-        {(currentCategory === 'all' || currentCategory === 'power_ground') && (
-          <PowerGroundSection soundEnabled={soundEnabled} />
-        )}
-
-        {/* 2. MULTI-BRAND PINOUT MATRIX SECTION */}
-        {(currentCategory === 'all' || currentCategory === 'pinouts') && (
-          <PinoutMatrixSection
-            soundEnabled={soundEnabled}
-            searchQuery={searchQuery}
-          />
-        )}
-
-        {/* 3. 38 SENSORS MASTER DIRECTORY SECTION */}
-        {(currentCategory === 'all' || currentCategory === 'sensors') && (
-          <SensorsDirectorySection
-            soundEnabled={soundEnabled}
-            searchQuery={searchQuery}
-          />
-        )}
-
-        {/* 4. MAJOR COMPONENT ASSEMBLIES (Actuators, Throttle, VVT-i, EGR, A/C) */}
-        {(currentCategory === 'all' || currentCategory === 'assemblies') && (
-          <AssembliesSection
-            soundEnabled={soundEnabled}
-            searchQuery={searchQuery}
-          />
-        )}
-
-        {/* 5. FUSE BOX & COLOR STANDARDS (Amperage colors & Abbreviations Dictionary) */}
-        {(currentCategory === 'all' || currentCategory === 'fuse_box') && (
-          <FuseBoxSection
-            soundEnabled={soundEnabled}
-            searchQuery={searchQuery}
-          />
-        )}
-
-        {/* 6. INTERIOR BUTTONS & DASHBOARD SYMBOLS DIRECTORY */}
-        {(currentCategory === 'all' || currentCategory === 'interior_symbols') && (
-          <InteriorSymbolsSection
-            soundEnabled={soundEnabled}
-            searchQuery={searchQuery}
-          />
-        )}
-
-        {/* 7. DASHBOARD WARNING & INDICATOR LIGHTS ENCYCLOPEDIA */}
-        {(currentCategory === 'all' || currentCategory === 'dashboard_lights') && (
-          <DashboardLightsSection
-            soundEnabled={soundEnabled}
-            searchQuery={searchQuery}
-          />
-        )}
-
-        {/* 8. SECRET MANUAL RESETS & RELEARN PROCEDURES */}
-        {(currentCategory === 'all' || currentCategory === 'manual_reset') && (
-          <ManualResetSection
-            soundEnabled={soundEnabled}
-            searchQuery={searchQuery}
-          />
-        )}
-
-        {/* 9. JDM DASHBOARD & TV SCREEN JAPANESE TRANSLATOR */}
-        {(currentCategory === 'all' || currentCategory === 'jdm_translator') && (
-          <JdmScreenTranslatorSection
-            soundEnabled={soundEnabled}
-            searchQuery={searchQuery}
-          />
-        )}
-
-        {/* 10. OBD-II DTC TROUBLE CODE MASTER ENCYCLOPEDIA */}
-        {(currentCategory === 'all' || currentCategory === 'dtc_codes') && (
-          <DtcMasterSection
-            soundEnabled={soundEnabled}
-            searchQuery={searchQuery}
-          />
-        )}
-
-        {/* 11. DIY SENSOR BENCH TESTER WORKBENCH */}
-        {(currentCategory === 'all' || currentCategory === 'bench_tester') && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between px-2 pt-2">
-              <h2 className="text-base sm:text-lg font-bold text-purple-300 flex items-center gap-2">
-                <Wrench className="w-5 h-5 text-purple-400" />
-                ၁၁။ စားပွဲတင် ဆန်ဆာစမ်းသပ်ဘုတ်ပြား (DIY Sensor Tester Workbench)
-              </h2>
-              <span className="text-xs text-stone-400">
-                L7805 + 5V Regulator + BC547 မီးသီးစနစ်
-              </span>
-            </div>
-            <SensorTesterWorkbench soundEnabled={soundEnabled} />
-          </div>
-        )}
-
-        {/* 6. EXPANDABLE MECHANICAL WORKSHOP TOOLS (Bolt Torque, Cummins, Scania) */}
-        <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-4 transition-all">
-          <div
+      {/* DUAL MASTER MODE SWITCHER (Wiring System vs Car A/C Master) */}
+      <div className="bg-stone-900/95 backdrop-blur-md border-b-2 border-stone-800 sticky top-0 z-40 px-2 sm:px-4 py-2 shadow-2xl">
+        <div className="max-w-3xl mx-auto flex items-center gap-1.5 sm:gap-2 bg-stone-950 p-1 sm:p-1.5 rounded-2xl border border-stone-800">
+          <button
             onClick={() => {
               if (soundEnabled) playChime(500, 0.1);
-              setShowMechanicalTools((prev) => !prev);
+              setMainAppMode('wiring');
             }}
-            className="flex items-center justify-between cursor-pointer select-none"
+            className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 sm:gap-2 transition-all ${
+              mainAppMode === 'wiring'
+                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 shadow-lg shadow-amber-500/40 ring-2 ring-amber-400'
+                : 'text-stone-400 hover:text-white hover:bg-stone-900'
+            }`}
           >
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-stone-800 flex items-center justify-center text-amber-400">
-                <Wrench className="w-4 h-4" />
+            <Zap className={`w-4 h-4 ${mainAppMode === 'wiring' ? 'text-stone-950 fill-stone-950' : 'text-amber-400'}`} />
+            <span>၁။ ဝါယာရိန်း & မီးပိုင်း စနစ်</span>
+          </button>
+
+          <button
+            onClick={() => {
+              if (soundEnabled) playChime(650, 0.12);
+              setMainAppMode('car_ac');
+            }}
+            className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 sm:gap-2 transition-all ${
+              mainAppMode === 'car_ac'
+                ? 'bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 text-stone-950 shadow-lg shadow-cyan-500/40 ring-2 ring-cyan-300'
+                : 'text-cyan-300 hover:text-white hover:bg-stone-900'
+            }`}
+          >
+            <Snowflake className={`w-4 h-4 ${mainAppMode === 'car_ac' ? 'text-stone-950 animate-spin' : 'text-cyan-400'}`} />
+            <span>၂။ ကားအဲကွန်း မာစတာ (CAR A/C)</span>
+          </button>
+        </div>
+      </div>
+
+      {/* MODE 1: AUTOMOTIVE WIRING & ELECTRONICS MASTER */}
+      {mainAppMode === 'wiring' && (
+        <>
+          {/* Official Master Header with Brand Logo, Global Search & Zoom Controls */}
+          <WiringMasterHeader
+            currentCategory={currentCategory}
+            onSelectCategory={setCurrentCategory}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            zoomLevel={zoomLevel}
+            onZoomChange={setZoomLevel}
+            soundEnabled={soundEnabled}
+            onToggleSound={toggleSound}
+          />
+
+          {/* Main Content Areas for Wiring */}
+          <main className="max-w-7xl mx-auto px-3 sm:px-6 py-4 space-y-5">
+            {/* Search Results Filter Banner if searching */}
+            {searchQuery && (
+              <div className="bg-amber-500/10 border border-amber-500/40 rounded-xl p-3 flex items-center justify-between text-xs text-amber-200">
+                <span>
+                  🔍 &quot;<strong>{searchQuery}</strong>&quot; ရှာဖွေမှု ရလဒ်များအား အောက်ပါ ကဏ္ဍအားလုံးတွင် တစ်ပြိုင်နက် ပြသနေပါသည်:
+                </span>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="text-amber-400 hover:text-amber-200 underline font-bold ml-2 cursor-pointer"
+                >
+                  ရှာဖွေမှု ဖျက်မည်
+                </button>
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-stone-200">
-                  စက်ပိုင်းဆိုင်ရာ လက်စွဲများ (Mechanical Torque & Engine Specs)
-                </h3>
-                <p className="text-xs text-stone-400">
-                  မူလီဆွဲပေါင် ဇယားများ၊ Cummins & Scania အင်ဂျင်ချိန်နည်းများ
-                </p>
+            )}
+
+            {/* 1. POWER & GROUND ARCHITECTURE SECTION */}
+            {(currentCategory === 'all' || currentCategory === 'power_ground') && (
+              <PowerGroundSection soundEnabled={soundEnabled} />
+            )}
+
+            {/* 2. MULTI-BRAND PINOUT MATRIX SECTION */}
+            {(currentCategory === 'all' || currentCategory === 'pinouts') && (
+              <PinoutMatrixSection
+                soundEnabled={soundEnabled}
+                searchQuery={searchQuery}
+              />
+            )}
+
+            {/* 3. 38 SENSORS MASTER DIRECTORY SECTION */}
+            {(currentCategory === 'all' || currentCategory === 'sensors') && (
+              <SensorsDirectorySection
+                soundEnabled={soundEnabled}
+                searchQuery={searchQuery}
+              />
+            )}
+
+            {/* 4. MAJOR COMPONENT ASSEMBLIES (Actuators, Throttle, VVT-i, EGR, A/C) */}
+            {(currentCategory === 'all' || currentCategory === 'assemblies') && (
+              <AssembliesSection
+                soundEnabled={soundEnabled}
+                searchQuery={searchQuery}
+              />
+            )}
+
+            {/* 5. FUSE BOX & COLOR STANDARDS (Amperage colors & Abbreviations Dictionary) */}
+            {(currentCategory === 'all' || currentCategory === 'fuse_box') && (
+              <FuseBoxSection
+                soundEnabled={soundEnabled}
+                searchQuery={searchQuery}
+              />
+            )}
+
+            {/* 6. INTERIOR BUTTONS & DASHBOARD SYMBOLS DIRECTORY */}
+            {(currentCategory === 'all' || currentCategory === 'interior_symbols') && (
+              <InteriorSymbolsSection
+                soundEnabled={soundEnabled}
+                searchQuery={searchQuery}
+              />
+            )}
+
+            {/* 7. DASHBOARD WARNING & INDICATOR LIGHTS ENCYCLOPEDIA */}
+            {(currentCategory === 'all' || currentCategory === 'dashboard_lights') && (
+              <DashboardLightsSection
+                soundEnabled={soundEnabled}
+                searchQuery={searchQuery}
+              />
+            )}
+
+            {/* 8. SECRET MANUAL RESETS & RELEARN PROCEDURES */}
+            {(currentCategory === 'all' || currentCategory === 'manual_reset') && (
+              <ManualResetSection
+                soundEnabled={soundEnabled}
+                searchQuery={searchQuery}
+              />
+            )}
+
+            {/* 9. JDM DASHBOARD & TV SCREEN JAPANESE TRANSLATOR */}
+            {(currentCategory === 'all' || currentCategory === 'jdm_translator') && (
+              <JdmScreenTranslatorSection
+                soundEnabled={soundEnabled}
+                searchQuery={searchQuery}
+              />
+            )}
+
+            {/* 10. OBD-II DTC TROUBLE CODE MASTER ENCYCLOPEDIA */}
+            {(currentCategory === 'all' || currentCategory === 'dtc_codes') && (
+              <DtcMasterSection
+                soundEnabled={soundEnabled}
+                searchQuery={searchQuery}
+              />
+            )}
+
+            {/* 11. DIY SENSOR BENCH TESTER WORKBENCH */}
+            {(currentCategory === 'all' || currentCategory === 'bench_tester') && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between px-2 pt-2">
+                  <h2 className="text-base sm:text-lg font-bold text-purple-300 flex items-center gap-2">
+                    <Wrench className="w-5 h-5 text-purple-400" />
+                    ၁၁။ စားပွဲတင် ဆန်ဆာစမ်းသပ်ဘုတ်ပြား (DIY Sensor Tester Workbench)
+                  </h2>
+                  <span className="text-xs text-stone-400">
+                    L7805 + 5V Regulator + BC547 မီးသီးစနစ်
+                  </span>
+                </div>
+                <SensorTesterWorkbench soundEnabled={soundEnabled} />
               </div>
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-amber-400 font-bold">
-              <span>{showMechanicalTools ? 'ပိတ်မည်' : 'ဖွင့်ကြည့်မည်'}</span>
-              {showMechanicalTools ? (
-                <ChevronUp className="w-4 h-4" />
-              ) : (
-                <ChevronDown className="w-4 h-4" />
+            )}
+
+            {/* EXPANDABLE MECHANICAL WORKSHOP TOOLS (Bolt Torque, Cummins, Scania) */}
+            <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-4 transition-all">
+              <div
+                onClick={() => {
+                  if (soundEnabled) playChime(500, 0.1);
+                  setShowMechanicalTools((prev) => !prev);
+                }}
+                className="flex items-center justify-between cursor-pointer select-none"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-stone-800 flex items-center justify-center text-amber-400">
+                    <Wrench className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-stone-200">
+                      စက်ပိုင်းဆိုင်ရာ လက်စွဲများ (Mechanical Torque & Engine Specs)
+                    </h3>
+                    <p className="text-xs text-stone-400">
+                      မူလီဆွဲပေါင် ဇယားများ၊ Cummins & Scania အင်ဂျင်ချိန်နည်းများ
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-amber-400 font-bold">
+                  <span>{showMechanicalTools ? 'ပိတ်မည်' : 'ဖွင့်ကြည့်မည်'}</span>
+                  {showMechanicalTools ? (
+                    <ChevronUp className="w-4 h-4" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4" />
+                  )}
+                </div>
+              </div>
+
+              {showMechanicalTools && (
+                <div className="mt-4 pt-4 border-t border-stone-800 space-y-4 animate-in fade-in duration-200">
+                  <BoltTorqueExplainer soundEnabled={soundEnabled} />
+                  <CumminsTimingGuide soundEnabled={soundEnabled} />
+                  <ScaniaInjectorTiming soundEnabled={soundEnabled} />
+                </div>
               )}
             </div>
-          </div>
+          </main>
+        </>
+      )}
 
-          {showMechanicalTools && (
-            <div className="mt-4 pt-4 border-t border-stone-800 space-y-4 animate-in fade-in duration-200">
-              <BoltTorqueExplainer soundEnabled={soundEnabled} />
-              <CumminsTimingGuide soundEnabled={soundEnabled} />
-              <ScaniaInjectorTiming soundEnabled={soundEnabled} />
-            </div>
-          )}
-        </div>
-      </main>
+      {/* MODE 2: STANDALONE DEDICATED CAR A/C MASTER */}
+      {mainAppMode === 'car_ac' && (
+        <main className="max-w-7xl mx-auto px-3 sm:px-6 py-4 space-y-5 animate-in fade-in duration-200">
+          <CarAcMasterSection
+            soundEnabled={soundEnabled}
+            searchQuery={searchQuery}
+          />
+        </main>
+      )}
 
       {/* Floating Zoom Widget for Mobile Workbench Use */}
       <FloatingZoomWidget
