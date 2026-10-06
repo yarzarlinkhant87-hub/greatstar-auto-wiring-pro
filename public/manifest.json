@@ -1,0 +1,32 @@
+{
+  "id": "/",
+  "name": "GREATSTAR WIRING & A/C PRO ❄️⚡",
+  "short_name": "Wiring & A/C ❄️",
+  "description": "ကားတစ်စီးလုံး ဝါယာရိန်း၊ ဆန်ဆာ & ကားအဲကွန်း (Car A/C) မာစတာလက်စွဲ — Power & Ground Architecture, 38 Sensors Master Directory, AC Manifold Gauges, Compressor Testing",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0c0a09",
+  "background_color": "#0c0a09",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

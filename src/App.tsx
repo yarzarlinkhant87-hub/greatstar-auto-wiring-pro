@@ -42,36 +42,41 @@ export default function App() {
       }}
     >
       {/* Top Banner for Mobile Installation / APK notification */}
-      <div className="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-stone-950 py-1.5 px-3 text-xs font-bold text-center flex items-center justify-center gap-2 shadow-md">
-        <Smartphone className="w-4 h-4 text-stone-950 shrink-0" />
-        <span>★ GREATSTAR.Z.N.W ★ — ကားတစ်စီးလုံး ဝါယာရိန်း၊ ဆန်ဆာ & အဲကွန်း မဟာလက်စွဲ</span>
+      <div className="bg-gradient-to-r from-cyan-600 via-amber-500 to-cyan-600 text-stone-950 py-1.5 px-3 text-xs font-bold text-center flex items-center justify-center gap-2 shadow-md flex-wrap">
+        <span className="text-sm">❄️</span>
+        <span className="font-extrabold tracking-wide">
+          ★ GREATSTAR.Z.N.W ★ — ❄️ အဲကွန်း (A/C) + ဝါယာရိန်း & ဆန်ဆာ မဟာလက်စွဲ
+        </span>
+        <span className="bg-cyan-950 text-cyan-300 text-[10px] font-black px-2 py-0.5 rounded-full border border-cyan-400/60 shadow-sm">
+          ❄️ A/C Edition
+        </span>
         <button
           onClick={() => {
             if (soundEnabled) playChime(700, 0.3);
             setShowInstallModal(true);
           }}
-          className="underline hover:text-stone-900 ml-1 cursor-pointer font-black"
+          className="underline hover:text-stone-900 ml-1 cursor-pointer font-black bg-stone-950/20 px-2 py-0.5 rounded"
         >
           (Install App)
         </button>
       </div>
 
       {/* DUAL MASTER MODE SWITCHER (Wiring System vs Car A/C Master) */}
-      <div className="bg-stone-900/95 backdrop-blur-md border-b-2 border-stone-800 sticky top-0 z-40 px-2 sm:px-4 py-2 shadow-2xl">
+      <div className="bg-stone-900/95 backdrop-blur-md border-b-2 border-cyan-500/30 sticky top-0 z-40 px-2 sm:px-4 py-2 shadow-2xl">
         <div className="max-w-3xl mx-auto flex items-center gap-1.5 sm:gap-2 bg-stone-950 p-1 sm:p-1.5 rounded-2xl border border-stone-800">
           <button
             onClick={() => {
               if (soundEnabled) playChime(500, 0.1);
               setMainAppMode('wiring');
             }}
-            className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 sm:gap-2 transition-all ${
+            className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
               mainAppMode === 'wiring'
                 ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 shadow-lg shadow-amber-500/40 ring-2 ring-amber-400'
                 : 'text-stone-400 hover:text-white hover:bg-stone-900'
             }`}
           >
             <Zap className={`w-4 h-4 ${mainAppMode === 'wiring' ? 'text-stone-950 fill-stone-950' : 'text-amber-400'}`} />
-            <span>၁။ ဝါယာရိန်း & မီးပိုင်း စနစ်</span>
+            <span>⚡ ၁။ ဝါယာရိန်း & မီးပိုင်း</span>
           </button>
 
           <button
@@ -79,14 +84,19 @@ export default function App() {
               if (soundEnabled) playChime(650, 0.12);
               setMainAppMode('car_ac');
             }}
-            className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 sm:gap-2 transition-all ${
+            className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
               mainAppMode === 'car_ac'
                 ? 'bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 text-stone-950 shadow-lg shadow-cyan-500/40 ring-2 ring-cyan-300'
-                : 'text-cyan-300 hover:text-white hover:bg-stone-900'
+                : 'text-cyan-300 hover:text-white hover:bg-stone-900 bg-cyan-950/40 border border-cyan-800/60'
             }`}
           >
             <Snowflake className={`w-4 h-4 ${mainAppMode === 'car_ac' ? 'text-stone-950 animate-spin' : 'text-cyan-400'}`} />
-            <span>၂။ ကားအဲကွန်း မာစတာ (CAR A/C)</span>
+            <span className="flex items-center gap-1">
+              <span>❄️ ၂။ ကားအဲကွန်း (CAR A/C)</span>
+              <span className="text-[10px] bg-red-600 text-white font-black px-1.5 py-0.2 rounded-full">
+                NEW
+              </span>
+            </span>
           </button>
         </div>
       </div>

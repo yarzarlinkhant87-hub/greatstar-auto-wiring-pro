@@ -77,11 +77,15 @@ export const PhoneInstallModal: React.FC<PhoneInstallModalProps> = ({
               <Smartphone className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg sm:text-xl font-bold text-stone-100 flex items-center gap-1.5">
+              <h3 className="text-lg sm:text-xl font-bold text-stone-100 flex items-center gap-1.5 flex-wrap">
                 <span>ဖုန်းထဲသို့ App အဖြစ် ထည့်သွင်းနည်း</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/50 flex items-center gap-1 font-mono">
+                  <span>❄️</span>
+                  <span>Wiring & A/C Edition</span>
+                </span>
               </h3>
               <p className="text-xs text-amber-400">
-                ဖုန်းစခရင်တွင် အိုင်ကွန်အဖြစ် ရောက်ရှိပြီး အင်တာနက်မလိုဘဲ သုံးနိုင်ပါသည်
+                ဖုန်းစခရင်တွင် "Wiring & A/C ❄️" အိုင်ကွန်အဖြစ် ရောက်ရှိပြီး အင်တာနက်မလိုဘဲ အပြည့်အဝ သုံးနိုင်ပါသည်
               </p>
             </div>
           </div>
@@ -185,8 +189,19 @@ export const PhoneInstallModal: React.FC<PhoneInstallModalProps> = ({
                 <span>Install ကို အတည်ပြုပါ</span>
               </div>
               <p className="text-stone-300 pl-8">
-                ခေတ္တစောင့်ပြီးနောက် သင့်ဖုန်း Home Screen ပေါ်တွင် <strong>Torque & Mingalaba ဆော့ဝဲ အိုင်ကွန်လေး</strong> ရောက်ရှိသွားပါမည်။
+                ခေတ္တစောင့်ပြီးနောက် သင့်ဖုန်း Home Screen ပေါ်တွင် <strong>"Wiring & A/C ❄️" (GreatStar) အိုင်ကွန်လေး</strong> ရောက်ရှိသွားပါမည်။
               </p>
+
+              {/* Version distinction / update tip */}
+              <div className="mt-3 p-3 rounded-xl bg-cyan-950/60 border border-cyan-500/40 text-cyan-200 text-xs space-y-1">
+                <div className="font-bold flex items-center gap-1.5 text-cyan-300">
+                  <span>❄️</span>
+                  <span>အဟောင်းနှင့် အသစ် ခွဲခြားနည်း & Update ပြုလုပ်နည်း:</span>
+                </div>
+                <p className="text-[11px] leading-relaxed text-stone-300">
+                  ဖုန်းစခရင်ပေါ်တွင် <strong>"Wiring & A/C ❄️"</strong> လို့ ပေါ်နေပါက အသစ်ဆုံး Version ဖြစ်ပါသည်။ အသစ်ထည့်ထားသော အဲကွန်းစနစ်များ မပေါ်သေးပါက ဖုန်းထဲရှိ အဟောင်း (GreatStar Auto-Wiring) ကို အရင် Uninstall (ဖျက်) ပြီးမှ Chrome မှတဆင့် ပြန်လည် Install ပြုလုပ်ပေးပါ ခင်ဗျာ။
+                </p>
+              </div>
             </div>
           </div>
         )}

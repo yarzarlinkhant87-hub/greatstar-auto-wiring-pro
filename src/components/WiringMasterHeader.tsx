@@ -47,20 +47,25 @@ export const WiringMasterHeader: React.FC<WiringMasterHeaderProps> = ({
             <BrandLogo size="md" showModalOnClick={true} />
 
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="font-black text-sm sm:text-base text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-amber-400 tracking-wide">
                   ★ GREATSTAR.Z.N.W ★
                 </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 hidden sm:inline-block">
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
                   PRO
+                </span>
+                {/* Visual indicator for Aircon update so Sayar can immediately distinguish old vs new app */}
+                <span className="text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-full bg-cyan-950/90 text-cyan-300 border border-cyan-400/70 flex items-center gap-1 shadow-md shadow-cyan-500/30 animate-pulse">
+                  <span className="text-[11px]">❄️</span>
+                  <span>A/C အဲကွန်းပါ</span>
                 </span>
               </div>
 
-              <h1 className="text-xs sm:text-sm font-bold text-stone-200 flex items-center gap-1.5">
+              <h1 className="text-xs sm:text-sm font-bold text-stone-200 flex items-center gap-1.5 flex-wrap mt-0.5">
                 <span className="text-cyan-400 font-mono font-semibold">⚙ ZAW NAING WIN ⚙</span>
-                <span className="text-stone-500 hidden md:inline">•</span>
-                <span className="text-stone-300 hidden md:inline text-xs font-normal">
-                  ကားတစ်စီးလုံး ဝါယာရိန်း၊ ဆန်ဆာ & ECU ထိန်းချုပ်မှု မာစတာလက်စွဲ
+                <span className="text-stone-500">•</span>
+                <span className="text-stone-300 text-[11px] sm:text-xs font-normal">
+                  ဝါယာရိန်း၊ ဆန်ဆာ & <span className="text-cyan-300 font-bold">❄️ ကားအဲကွန်း (A/C) မာစတာ</span>
                 </span>
               </h1>
             </div>
